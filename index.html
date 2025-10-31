@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الملك - نظام إدارة نقاط البيع</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- شاشة تسجيل الدخول -->
+    <div id="loginScreen" class="login-screen">
+        <div class="login-container">
+            <div class="login-header">
+                <div class="logo">
+                    <svg width="80" height="80" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="45" fill="url(#gradient1)" />
+                        <path d="M50 20 L60 40 L80 40 L65 52 L70 70 L50 58 L30 70 L35 52 L20 40 L40 40 Z"
+                            fill="white" />
+                        <defs>
+                            <linearGradient id="gradient1" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h1>الملك</h1>
+                <p>نظام إدارة نقاط البيع الاحترافي</p>
+            </div>
+            <div class="login-form">
+                <div class="form-group">
+                    <label for="password">كلمة المرور</label>
+                    <input type="password" id="password" placeholder="أدخل كلمة المرور" autocomplete="current-password">
+                </div>
+                <button onclick="login()" class="btn-primary">تسجيل الدخول</button>
+                <div class="login-footer">
+                    <p>كلمة المرور الافتراضية: <strong>123</strong></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- التطبيق الرئيسي -->
+    <div id="mainApp" class="main-app" style="display: none;">
+        <!-- الشريط العلوي -->
+        <header class="top-bar">
+            <div class="top-bar-right">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+                <h2 id="pageTitle">لوحة المعلومات</h2>
+            </div>
+            <div class="top-bar-left">
+                <div class="user-info">
+                    <span id="currentDate"></span>
+                    <span class="separator">|</span>
+                    <span id="currentTime"></span>
+                </div>
+                <button onclick="logout()" class="btn-logout" title="تسجيل الخروج">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9" />
+                    </svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- القائمة الجانبية -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-small">
+                    <svg width="40" height="40" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="45" fill="url(#gradient2)" />
+                        <path d="M50 20 L60 40 L80 40 L65 52 L70 70 L50 58 L30 70 L35 52 L20 40 L40 40 Z"
+                            fill="white" />
+                        <defs>
+                            <linearGradient id="gradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <h3>الملك POS</h3>
+            </div>
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" onclick="showPage('dashboard')">
+                    <span class="nav-icon">📊</span>
+                    <span class="nav-text">لوحة المعلومات</span>
+                </a>
+                <a href="#" class="nav-item" onclick="showPage('sales')">
+                    <span class="nav-icon">🛒</span>
+                    <span class="nav-text">نقطة البيع</span>
+                </a>
+                <a href="#" class="nav-item" onclick="showPage('returns')">
+                    <span class="nav-icon">↩️</span>
+                    <span class="nav-text">استرجاع منتج</span>
+                </a>
+                <a href="#" class="nav-item" onclick="showPage('products')">
+                    <span class="nav-icon">📦</span>
+                    <span class="nav-text">المنتجات</span>
+                </a>
+                <a href="#" class="nav-item" onclick="showPage('customers')">
+                    <span class="nav-icon">👥</span>
+                    <span class="nav-text">العملاء</span>
+                </a>
+                <a href="#" class="nav-item" onclick="showPage('suppliers')">
+                    <span class="nav-icon">🏭</span>
+                    <span class="nav-text">الموردين</span>
+                </a>
+                <a href="#" class="nav-item" onclick="showPage('purchases')">
+                    <span class="nav-icon">📥</span>
+                    <span class="nav-text">المشتريات</span>
+                </a>
+                <a href="#" class="nav-item" onclick="showPage('debts')">
+                    <span class="nav-icon">💰</span>
+                    <span class="nav-text">الديون والمدفوعات</span>
+                </a>
+                <a href="#" class="nav-item" onclick="showPage('reports')">
+                    <span class="nav-icon">📈</span>
+                    <span class="nav-text">التقارير</span>
+                </a>
+                <a href="#" class="nav-item" onclick="showPage('settings')">
+                    <span class="nav-icon">⚙️</span>
+                    <span class="nav-text">الإعدادات</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- المحتوى الرئيسي -->
+        <main class="main-content" id="mainContent">
+            <!-- سيتم تحميل المحتوى هنا ديناميكياً -->
+        </main>
+    </div>
+
+    <!-- نافذة منبثقة للرسائل -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="modal-close" onclick="closeModal()">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <!-- نافذة التأكيد -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-content confirm-modal">
+            <h3 id="confirmTitle">تأكيد العملية</h3>
+            <p id="confirmMessage"></p>
+            <div class="modal-actions">
+                <button onclick="confirmAction(true)" class="btn-primary">نعم</button>
+                <button onclick="confirmAction(false)" class="btn-secondary">لا</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- نافذة الطباعة -->
+    <div id="printModal" class="modal">
+        <div class="modal-content print-modal">
+            <span class="modal-close" onclick="closePrintModal()">&times;</span>
+            <div id="printContent"></div>
+            <div class="modal-actions">
+                <button onclick="printInvoice()" class="btn-primary">طباعة</button>
+                <button onclick="closePrintModal()" class="btn-secondary">إغلاق</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- تحميل السكريبتات -->
+    <script src="database.js"></script>
+    <script src="translations.js"></script>
+    <script src="main.js"></script>
+    <script src="app.js"></script>
+    <script src="dashboard.js"></script>
+    <script src="products.js"></script>
+    <script src="sales.js"></script>
+    <script src="returns.js"></script>
+    <script src="customers.js"></script>
+    <script src="suppliers.js"></script>
+    <script src="purchases.js"></script>
+    <script src="reports.js"></script>
+</body>
+
+</html>

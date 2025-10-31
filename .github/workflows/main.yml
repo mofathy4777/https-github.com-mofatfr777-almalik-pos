@@ -1,0 +1,79 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-android:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+    
+    - name: Setup Java JDK
+      uses: actions/setup-java@v3
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+    
+    - name: Install Cordova
+      run: |
+        npm install -g cordova
+        cordova --version
+    
+    - name: Create Cordova project
+      run: |
+        cordova create cordova-app com.almalik.pos "AlMalik POS"
+    
+    - name: Copy app files
+      run: |
+        cp index.html cordova-app/www/ || true
+        cp styles.css cordova-app/www/ || true
+        cp app.js cordova-app/www/ || true
+        cp icon.png cordova-app/www/ || true
+        ls -la cordova-app/www/
+    
+    - name: Add Android platform
+      working-directory: cordova-app
+      run: |
+        cordova platform add android
+        cordova platform ls
+    
+    - name: Build Android APK
+      working-directory: cordova-app
+      run: |
+        cordova build android --verbose
+    
+    - name: List APK files
+      run: |
+        find cordova-app -name "*.apk" -type f
+    
+    - name: Upload APK artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: AlMalik-POS-Android
+        path: cordova-app/platforms/android/app/build/outputs/apk/debug/app-debug.apk
+        if-no-files-found: error
+    
+    - name: Get APK info
+      run: |
+        APK_PATH="cordova-app/platforms/android/app/build/outputs/apk/debug/app-debug.apk"
+        if [ -f "$APK_PATH" ]; then
+          echo "✅ APK built successfully!"
+          echo "📦 Size: $(du -h $APK_PATH | cut -f1)"
+          echo "📍 Path: $APK_PATH"
+        else
+          echo "❌ APK not found!"
+          exit 1
+        fi
+
